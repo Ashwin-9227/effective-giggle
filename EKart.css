@@ -1,0 +1,20 @@
+label {
+	width: 80px;
+	clear: left;
+	text-align: center;
+	padding-right: 10px;
+}
+
+/* input, label {
+	float: left;
+} */
+
+button {
+	clear: left;
+	
+	padding-right: 10px;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
