@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>Technical Survey</title>
+
+<script type="text/javascript" src="techsurvey.js"></script>
+
+<script language="JavaScript">
+
+	//@Reference
+	var techsurveydata = new Reference("techsurveydata");
+	
+	var radionames = [];
+	var allItems;
+	var selectedanswers = [];
+	var selectedanswerstostring = "";
+
+	function techsurveydata_getResponse(map) 
+	{
+		var ListQues;
+		var ListAns;
+		var Questions = "";
+		var Answers = "";
+		var clubbed = "";
+		var serialno = 0;
+		
+		//console.log(map.map.questions.list);
+		ListQues = map.map.questions.list;
+		//console.log(map.map.answers.list);
+		ListAns = map.map.answers.list;
+		
+		allItems = ListAns;
+		
+		for (var i=0; i<ListQues.length; i++) 
+		{
+			radionames.push(ListQues[i].quesid);
+			
+			serialno = serialno+1;
+			Questions = "";
+			Answers = "";
+			Questions += '<p>'+ serialno +'. '+ ListQues[i].question +' </p>';
+			for (var j=0; j<ListAns.length; j++) 
+			{
+				if(ListQues[i].quesid == ListAns[j].quesid)
+				{
+					Answers += '<input name="Answers_'+ListQues[i].quesid+ '" type="radio" value="' + ListAns[j].answer + '" checked >' + ListAns[j].answer + ' <br>';
+				}
+			}
+			
+			clubbed += Questions+Answers;
+		}
+		
+		document.getElementById('techsurvey').innerHTML=clubbed;
+	}
+
+	function init() 
+	{
+		//console.log("tesf");
+		techsurveydata.getinitialization("",techsurveydata_getResponse);
+	}
+	
+	function submit() 
+	{
+		selectedanswerstostring = "";
+		selectedanswers = [];
+		for (var i=0; i<radionames.length; i++)
+		{
+			var items  = document.getElementsByName('Answers_'+radionames[i]);
+			for (var j=0; j<items.length; j++)
+			{
+				if (items[j].checked) 
+				{
+					console.log("selected answer for Question:"+(i+1)+" is -> "+allItems[(3*i)+j].answer);
+					selectedanswers.push(allItems[(3*i)+j]);
+					//selectedanswerstostring = selectedanswerstostring+"quesid:"+radionames[i]+" answid:"+allItems[(((i+1)*(i+1))+(j+1))-2].answid;
+				}
+			}
+		}
+		console.log(selectedanswers);
+		techsurveydata.validateanswers(selectedanswerstostring,techsurveyvalidatedata_getResponse);
+	}
+	
+	function techsurveyvalidatedata_getResponse(map) 
+	{
+		
+	}
+	
+</script>
+</head>
+<body onload="init()">
+
+	<h1 style="text-align: center;">Technical Survey</h1>
+	<!-- <form name="techsurveyForm"> -->
+		<div id="techsurvey"></div>
+		<br>
+		<input type="button" onClick="submit()"  value="Submit">
+	<!-- </form> -->
+</body>
+</html>
