@@ -29,7 +29,7 @@
 		ListAns = map.map.answers.list;
 		
 		allItems = ListAns;
-		
+		radionames = [];
 		for (var i=0; i<ListQues.length; i++) 
 		{
 			radionames.push(ListQues[i].quesid);
@@ -50,12 +50,15 @@
 		}
 		
 		document.getElementById('techsurvey').innerHTML=clubbed;
+		document.getElementById('btn_submit').value = 'Submit';
 	}
 
 	function init() 
 	{
 		//console.log("tesf");
 		techsurveydata.getinitialization("",techsurveydata_getResponse);
+		
+		document.getElementById('divsubmit').innerHTML='<input type="button" onClick="submit()" id="btn_submit" value="Submit" style="margin-left: 0px;">';
 	}
 	
 	function submit() 
@@ -71,7 +74,7 @@
 				{
 					console.log("selected answer for Question:"+(i+1)+" is -> "+allItems[(3*i)+j].answer);
 					selectedanswers.push(allItems[(3*i)+j]);
-					//selectedanswerstostring = selectedanswerstostring+"quesid:"+radionames[i]+" answid:"+allItems[(((i+1)*(i+1))+(j+1))-2].answid;
+					selectedanswerstostring = selectedanswerstostring+"quesid:"+radionames[i]+" answid:"+allItems[(3*i)+j].answid;
 				}
 			}
 		}
@@ -81,7 +84,12 @@
 	
 	function techsurveyvalidatedata_getResponse(map) 
 	{
+		var result = "";
+		console.log(map);
 		
+		result = '<h2 style="text-align: center;">You scored '+map.map.totalrightanswers+' answer(s) correct out of '+map.map.totalquestions+' question(s) </h2>';
+		document.getElementById('techsurvey').innerHTML = result;
+		document.getElementById('divsubmit').innerHTML='<input type="button" onClick="init()" id="btn_submit" value="Ok" style="margin-left: 600px;">';
 	}
 	
 </script>
@@ -92,7 +100,8 @@
 	<!-- <form name="techsurveyForm"> -->
 		<div id="techsurvey"></div>
 		<br>
-		<input type="button" onClick="submit()"  value="Submit">
+		<div id="divsubmit"></div>
+		
 	<!-- </form> -->
 </body>
 </html>

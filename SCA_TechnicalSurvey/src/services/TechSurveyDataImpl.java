@@ -48,10 +48,13 @@ public class TechSurveyDataImpl implements TechSurveyData
 		tsquestions tsquestions = new tsquestions();
 		List <tsanswers> Listtsanswers = new ArrayList<tsanswers>();
 		tsanswers tsanswers = new tsanswers();
+		StringBuilder StringBuilder = new StringBuilder();
 		
 		Map<String, Object> Map = new HashMap<String, Object>();
 		Statement statement = conn.createStatement();
-		ResultSet result = statement.executeQuery("select * from tsquestions where active=1 order by sortorder");
+		ResultSet result = statement.executeQuery("select a.* from ( " + 
+				"select *,FLOOR(RAND()*100 ) as random from tsquestions where active=1 ) a " + 
+				"order by a.random");
 		while(result.next())
 		{
 			tsquestions = new tsquestions();
@@ -61,9 +64,12 @@ public class TechSurveyDataImpl implements TechSurveyData
 			tsquestions.setSortorder(result.getInt("sortorder"));
 			
 			Listtsquestions.add(tsquestions);
+			
+			StringBuilder = StringBuilder.append(","+tsquestions.getQuesid());
 		}
 		
-		result = statement.executeQuery("select * from tsanswers");
+		result = statement.executeQuery("select * from tsanswers order by field(quesid"+StringBuilder+")");
+		System.out.println("select * from tsanswers order by field(quesid"+StringBuilder+")");
 		while(result.next())
 		{
 			tsanswers = new tsanswers();
@@ -83,21 +89,40 @@ public class TechSurveyDataImpl implements TechSurveyData
 	public Map<String, Object> validateanswers(String str) throws Exception
 	{
 		Map<String, Object> Map = new HashMap<String, Object>();
-		List <tsanswers> List = new ArrayList<tsanswers>();
-		tsanswers tsanswers = new tsanswers();
+		List <tsvalidateanswers> List = new ArrayList<tsvalidateanswers>();
+		tsvalidateanswers tsvalidateanswers = new tsvalidateanswers();
+		int totalquestions = 0;
+		int totalrightanswers = 0;
 		
 		String[] StringArray = str.split("quesid:");
 		
 		for (String string : StringArray) 
 		{
-			tsanswers = new tsanswers();
+			tsvalidateanswers = new tsvalidateanswers();
 			if(string.length() > 0)
 			{
-				tsanswers.setQuesid( Integer.valueOf( string.substring( 0, string.lastIndexOf("answ")-1 ) ) );
-				tsanswers.setAnswid( Integer.valueOf( string.substring( string.lastIndexOf(":")+1, string.length() ) ) );
-				List.add(tsanswers);
+				tsvalidateanswers.setQuesid( Integer.valueOf( string.substring( 0, string.lastIndexOf("answ")-1 ) ) );
+				tsvalidateanswers.setAnswid( Integer.valueOf( string.substring( string.lastIndexOf(":")+1, string.length() ) ) );
+				List.add(tsvalidateanswers);
 			}
 		}
+		
+		totalquestions = List.size();
+		
+		for (tsvalidateanswers tsvalidateanswers1 : List) 
+		{
+            Statement statement = conn.createStatement();
+            ResultSet result = statement.executeQuery("select * from tsvalidateanswers where quesid="+tsvalidateanswers1.getQuesid()+" "
+            		+ "and answid="+tsvalidateanswers1.getAnswid());
+            
+            while(result.next())
+    		{
+            	totalrightanswers++;
+    		}
+		}
+		
+		Map.put("totalquestions", totalquestions);
+		Map.put("totalrightanswers", totalrightanswers);
 		
 		return Map;
 	}
