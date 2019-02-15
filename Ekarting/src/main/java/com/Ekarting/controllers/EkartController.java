@@ -15,7 +15,8 @@ import com.Ekarting.pojo.Products;
 import com.Ekarting.pojo.Users;
 
 @Controller  
-public class EkartController {  
+public class EkartController {
+	
     @Autowired  
     UsersDao dao;//will inject dao from xml file  
       
@@ -59,6 +60,11 @@ public class EkartController {
     }
     
     @RequestMapping("/Viewkart/Logout")  
+    public String Logout1(){
+    	return "redirect:/Login";
+    }
+    
+    @RequestMapping("/Logout")  
     public String Logout(){
     	return "redirect:/Login";
     }
@@ -102,10 +108,18 @@ public class EkartController {
     @RequestMapping(value="/register",method = RequestMethod.POST)  
     public String register(@ModelAttribute("users") Users users)
     {
+    	int i;
     	try
     	{
-    		dao.save(users);  
-    		return "redirect:/Success";//will redirect to Login request mapping
+    		i = dao.save(users);
+    		if(i == 1)
+    		{
+    			return "redirect:/Success";//will redirect to Login request mapping    			
+    		}
+    		else
+    		{
+    			return "redirect:/Exists";//will redirect to Login request mapping
+    		}
     	}
     	catch (Exception e)
     	{

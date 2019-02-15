@@ -2,13 +2,21 @@ package com.Ekarting.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.Ekarting.pojo.Products;
 import com.Ekarting.pojo.Userkart;
 import com.Ekarting.pojo.Users;
 
+//@Repository("dao")
+@Service("dao")
 public class UsersDao // extends HibernateDaoSupport
 {  
 	JdbcTemplate jdbctemplate;  
@@ -21,8 +29,22 @@ public class UsersDao // extends HibernateDaoSupport
 
 	public int save(Users u)
 	{  
-		String sql="insert into Users(loginid,password,name) values('"+u.getLoginid()+"','"+u.getPassword()+"','"+u.getName()+"')";  
-		return jdbctemplate.update(sql);  
+		List<Users> Users = new ArrayList<Users>();
+
+		String sql="select * from users where loginid=?";  
+		Users = jdbctemplate.query(sql, new Object[]{u.getLoginid()},new BeanPropertyRowMapper<Users>(Users.class));  
+
+		if(Users.isEmpty())
+		{
+			sql="insert into Users(loginid,password,name) values('"+u.getLoginid()+"','"+u.getPassword()+"','"+u.getName()+"')";
+			jdbctemplate.update(sql);
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+		  
 	} 
 
 	public int loginvalidation(Users u)

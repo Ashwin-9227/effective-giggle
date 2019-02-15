@@ -2,6 +2,11 @@ package com.Ekarting.pojo;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="users")
 public class Users implements Serializable
 {  
 

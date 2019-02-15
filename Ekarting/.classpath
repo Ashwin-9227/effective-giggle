@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/aopalliance-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/commons-logging-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/h2-1.2.134.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/hibernate3.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/hk2-api-2.4.0-b34.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/hk2-locator-2.4.0-b34.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/hk2-utils-2.4.0-b34.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/javax.servlet-3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/jstl-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/org.springframework.beans-3.1.2.release.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/org.springframework.context-3.0.4.release.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/org.springframework.jdbc-3.0.2.release.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/org.springframework.orm-3.0.2.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/org.springframework.web-3.0.6.release.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-aop-4.3.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-beans-4.3.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-context-4.3.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-core-4.3.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-dao-2.0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-expression-4.3.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-integration-core-4.0.5.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-messaging-4.0.7.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-orm-3.1.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-retry-1.1.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-tx-4.0.7.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-web-4.3.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/spring-webmvc-4.3.1.RELEASE.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/hibernate-validator-4.2.0.final.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/hibernate-entitymanager-4.0.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/hibernate-core-3.3.2.GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/log4j-1.2.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/logback-classic-1.0.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/slf4j-api-1.7.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/A.Krishnamurthy/eclipse-workspace/Ekarting/src/main/resources/slf4j-ext-1.7.0.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
