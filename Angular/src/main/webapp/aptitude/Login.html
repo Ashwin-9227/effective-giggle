@@ -1,0 +1,240 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<title>Login Page</title>
+<script type="text/javascript">
+	var app = angular.module("Aptitude", []);
+	var method = "";
+	var url = "";
+	var data = "";
+	var aptitudearray = [];
+	var questionarray = [];
+	var answerarray = [];
+	var userid = -1;
+	app
+			.controller(
+					"AptitudeController",
+					function($scope, $http) {
+						$scope.login = {
+							loginName : "",
+							password : ""
+						};
+
+						$scope.aptitude = [];
+
+						$scope.loginUser = function() {
+							method = "POST";
+							url = "/loginUser";
+							data = $scope.login;
+
+							if ($scope.login != undefined) {
+								backendcall(method, url, data);
+							}
+						}
+
+						function backendcall(method, url, data) {
+							$http({
+								method : method,
+								url : url,
+								data : angular.toJson(data),
+								headers : {
+									'Content-Type' : 'application/json'
+								}
+							}).then(success, error);
+						}
+
+						function success(response) {
+							if (response.data["status"] != undefined) {
+								if (response.data["status"] == "Login Successfull!!!"
+										&& response.data["userdetails"] != undefined) {
+									cleardata();
+									alert(response.data["status"]);
+									method = "GET";
+									url = "/getAptitude";
+									data = null;
+									userid = response.data["userdetails"]["id"];
+									backendcall(method, url, data);
+
+								} else {
+									alert(response.data["status"]);
+								}
+							} else if (typeof response.data == "object") {
+								if (response.data["questions"] != undefined
+										&& response.data["answers"] != undefined) {
+									document.getElementById("div_login").style.display = "none";
+									document.getElementById("div_aptitude").style.display = "block";
+									$scope.aptitude["question"] = response.data["questions"];
+									questionarray = response.data["questions"];
+									answerarray = response.data["answers"];
+									var array = [];
+									for (i = 0; i < questionarray.length; i++) {
+
+										aptitudearray["question"] = questionarray[i];
+										var index = 0;
+										var multiarray = [];
+										for (j = 0; j < answerarray.length; j++) {
+											if (questionarray[i]["quesid"] == answerarray[j]["quesid"]) {
+												multiarray = multiarray
+														.concat(answerarray[j]);
+											}
+										}
+										aptitudearray["question"]["answers"] = multiarray;
+										console.log("");
+
+										array = array
+												.concat(aptitudearray["question"]);
+										console.log("");
+									}
+								} else if (response.data["Result"] != undefined) {
+									if (response.data["Result"] == "Success") {
+										alert("Thanks for participating "
+												+ response.data["userdetails"]["fullName"]
+												+ ". Have a nice day!!!. \n By clicking the OK button will Logout.");
+										location.reload();
+									} else if (response.data["Result"] == "Failure") {
+										alert("Try submiting again!!!");
+									}
+								} else if (response.data["userdetails"] != undefined) {
+									document.getElementById("div_login").style.display = "none";
+									document.getElementById("div_aptitude").style.display = "none";
+									document.getElementById("div_result").style.display = "block";
+									$scope.userdetails = response.data["userdetails"];
+								}
+							}
+						}
+
+						function error(response) {
+							console.log(response.statusText);
+						}
+
+						function cleardata() {
+							$scope.login.loginName = "";
+							$scope.login.password = "";
+						}
+
+						$scope.validateanswers = function() {
+							var radiobindingarray = [];
+							var validateanswerarray = [];
+							radiobindingarray = $scope.myform.$$success["parse"];
+							for (i = 0; i < radiobindingarray.length; i++) {
+								console.log(radiobindingarray[i].$viewValue);
+								validateanswerarray = validateanswerarray
+										.concat(radiobindingarray[i].$viewValue);
+							}
+
+							method = "POST";
+							url = "/validateAnswer";
+							data = {};
+							data.validateanswerarray = validateanswerarray;
+							data.userid = userid;
+
+							if (radiobindingarray != undefined) {
+								backendcall(method, url, data);
+							}
+
+						}
+					});
+
+	$(document).ready(function() {
+		$("#login_registerclick").click(login_callRegister);
+		$("#login_clearclick").click(login_callClear);
+		$("#login_logoutclick").click(login_callLogout);
+
+		function login_callRegister() {
+			window.location.href = "Register.html";
+		}
+
+		function login_callClear() {
+			login_LoginName.value = "";
+			login_Password.value = "";
+		}
+		
+		function login_callLogout() {
+			location.reload();
+		}
+	});
+</script>
+
+<!-- <table style="margin-left:auto;margin-right:auto;"> style="margin: 0px auto;" -->
+<body ng-app="Aptitude" ng-controller="AptitudeController">
+	<div style="margin-top: 200px; display: block;" id="div_login">
+		<form ng-submit="loginUser()">
+			<table style="margin-left: auto; margin-right: auto;">
+				<tr>
+					<th colspan="2" style="text-align: center;">Login Information</th>
+				</tr>
+				<tr>
+					<td>Login Name</td>
+					<td><input id="login_LoginName" type="text"
+						ng-model="login.loginName" required="required" /></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input id="login_Password" type="password"
+						ng-model="login.password" required="required" /></td>
+				</tr>
+				<tr>
+					<td style="text-align: left;"><input id="login_registerclick"
+						type="button" value="Sign Up" class="blue-button" /></td>
+					<td colspan="1" style="text-align: right;"><input
+						type="submit" value="Login" class="blue-button" /> <input
+						id="login_clearclick" type="button" value="Clear"
+						class="red-button" /></td>
+				</tr>
+
+			</table>
+		</form>
+	</div>
+	<div style="display: none;" id="div_aptitude">
+		<form name="myform" ng-submit="validateanswers()">
+			<ul style="list-style-type: none; padding: 0;">
+				<li ng-repeat="questions in aptitude.question">
+					<p>{{($index+1+". ")+questions.question}}</p>
+					<ul style="list-style-type: none;">
+						<li ng-repeat="option in questions.answers"><input
+							name="{{questions.question}}" type="radio"
+							ng-model="questions.answer" value="{{option}}"
+							required="required"> {{option.answer}}</li>
+
+					</ul> <!--  Answer: {{questions.answer}} -->
+				</li>
+			</ul>
+			<p>
+				<input type="submit" value="Submit">
+			</p>
+		</form>
+		{{answers}}
+	</div>
+	<div style="display: none;" id="div_result">
+		<table style="margin-left: auto; margin-right: auto;">
+			<tr>
+				<th style="text-align: center;">S. No</th>
+				<th>Full Name</th>
+				<th>Email</th>
+				<th>Test Result</th>
+				<th>Last Test Attempt</th>
+				<th>Total Test Attempts</th>
+			</tr>
+			<tr ng-repeat="userdetail in userdetails">
+				<td>{{ $index+1 }}</td>
+				<td>{{ userdetail.fullName }}</td>
+				<td>{{ userdetail.email }}</td>
+				<td>{{ userdetail.testresult }}</td>
+				<td>{{ userdetail.lastattemptoftest }}</td>
+				<td>{{ userdetail.totalattempts }}</td>
+			</tr>
+			<tr>
+				<td colspan="6" style="text-align: right;"><input id="login_logoutclick"
+					type="button" value="Log Out" class="blue-button" /></td>
+			</tr>
+
+		</table>
+	</div>
+</body>
+</head>
+</html>

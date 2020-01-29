@@ -1,0 +1,14 @@
+boot\dao\UserDao.class
+boot\dao\UserDaoImpl.class
+boot\dao\AptitudeDao.class
+boot\controller\AptitudeController.class
+boot\model\AptitudeQuestions.class
+Main.class
+boot\model\UserDetails.class
+boot\service\AptitudeService.class
+boot\model\AptitudeAnswers.class
+boot\SpringBootAJSApplication.class
+boot\HibernateConfiguration.class
+boot\model\AptitudeValidateanswers.class
+boot\service\UserService.class
+boot\dao\AptitiudeDaoImpl.class

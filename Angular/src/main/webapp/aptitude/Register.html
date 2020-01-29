@@ -1,0 +1,134 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<title>Sign Up Page</title>
+<script type="text/javascript">
+	var app = angular.module("Aptitude", []);
+	var method = "";
+	var url = "";
+	var data = "";
+
+	app.controller("AptitudeController", function($scope, $http) {
+		$scope.register = {
+			id : null,
+			loginName : "",
+			fullName : "",
+			password : "",
+			email : "",
+			dob : ""
+		};
+
+		$scope.registerUser = function() {
+			method = "POST";
+			url = "/registerUser";
+			data = $scope.register;
+
+			if ($scope.register != undefined) {
+				backendcall(method, url, data);
+			}
+
+		}
+
+		function backendcall(method, url, data) {
+			$http({
+				method : method,
+				url : url,
+				data : angular.toJson(data),
+				headers : {
+					'Content-Type' : 'application/json'
+				}
+			}).then(success, error);
+		}
+
+		function success(response) {
+			if (angular.isObject(response.data)) {
+				cleardata();
+				alert("Registration Successfull!!!");
+				window.location.href = "Login.html";
+			} else
+				alert(response.data);
+		}
+
+		function error(response) {
+			console.log(response.statusText);
+		}
+		
+		function cleardata() {
+			$scope.register.fullName = "";
+			$scope.register.loginName = "";
+			$scope.register.password = "";
+			$scope.register.email = "";
+			$scope.register.dob = "";
+		}
+
+	});
+
+	$(document).ready(function() {
+		$("#register_loginclick").click(register_callLogin);
+		$("#register_clearclick").click(register_callClear);
+
+		function register_callLogin() {
+			window.location.href = "/";
+		}
+
+		function register_callClear() {
+			register_FullName.value = "";
+			register_LoginName.value = "";
+			register_Password.value = "";
+			register_EmailID.value = "";
+			register_DOB.value = "";
+		}
+	});
+</script>
+<body ng-app="Aptitude" ng-controller="AptitudeController">
+	<div style="margin-top: 200px;">
+		<form ng-submit="registerUser()">
+			<table style="margin-left: auto; margin-right: auto;">
+				<tr>
+					<th colspan="2" style="text-align: center;">Registration
+						Information</th>
+				</tr>
+				<tr>
+					<td>Full Name</td>
+					<td><input id="register_FullName" type="text"
+						ng-model="register.fullName" required="required" /></td>
+				</tr>
+				<tr>
+					<td>Login ID</td>
+					<td><input id="register_LoginName" type="text"
+						ng-model="register.loginName" required="required" /></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input id="register_Password" type="password"
+						ng-model="register.password" required="required" /></td>
+				</tr>
+				<tr>
+					<td>Email ID</td>
+					<td><input id="register_EmailID" type="email"
+						ng-model="register.email" required="required" /></td>
+				</tr>
+				<tr>
+					<td>Date of Birth</td>
+					<td><input id="register_DOB" type="date" style="width: 166"
+						ng-model="register.dob" required="required" /></td>
+				</tr>
+				<tr>
+					<td style="text-align: left;"><input id="register_loginclick"
+						type="button" value="Sign In" class="blue-button" /></td>
+					<td colspan="1" style="text-align: right;"><input
+						type="submit" value="Register" class="blue-button" /> <input
+						id="register_clearclick" type="button" value="Clear"
+						class="red-button" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</head>
+</html>
