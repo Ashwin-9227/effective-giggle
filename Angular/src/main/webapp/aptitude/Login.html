@@ -138,7 +138,69 @@
 							}
 
 						}
-					});
+					})
+
+	app.factory('readFile', function($window, $q) {
+		'use strict';
+
+		var readFile = function(file) {
+			var deferred = $q.defer(), reader = new $window.FileReader();
+
+			reader.onload = function(ev) {
+				var content = ev.target.result;
+				deferred.resolve(content);
+			};
+
+			reader.readAsText(file);
+			return deferred.promise;
+		};
+
+		return readFile;
+	})
+
+	app.directive('fileBrowser', function(readFile, $http) {
+		'use strict';
+
+		var filename;
+
+		return {
+			template : '<input type="file" style="display: none;" />'
+					+ '<ng-transclude></ng-transclude>',
+			transclude : true,
+			link : function(scope, element) {
+				var fileInput = element.children('input[file]');
+
+				fileInput.on('change', function(event) {
+					var file = event.target.files[0];
+					filename = file;
+					console.log(filename.name);
+					var fd = new FormData();
+					fd.append('file', file);
+
+					$http.post("/uploadAptitude", fd, {
+						transformRequest : angular.identity,
+						headers : {
+							'Content-Type' : undefined
+						},
+						data : fd
+					}).then(success, error);
+
+				});
+
+				element.on('click', function() {
+					fileInput[0].click();
+				});
+
+				function success(response) {
+					alert(response.data);
+				}
+				function error(response) {
+					console.log(response.statusText);
+					alert(response.data);
+				}
+			}
+		};
+	});
 
 	$(document).ready(function() {
 		$("#login_registerclick").click(login_callRegister);
@@ -153,7 +215,7 @@
 			login_LoginName.value = "";
 			login_Password.value = "";
 		}
-		
+
 		function login_callLogout() {
 			location.reload();
 		}
@@ -211,29 +273,34 @@
 		{{answers}}
 	</div>
 	<div style="display: none;" id="div_result">
-		<table style="margin-left: auto; margin-right: auto;">
-			<tr>
-				<th style="text-align: center;">S. No</th>
-				<th>Full Name</th>
-				<th>Email</th>
-				<th>Test Result</th>
-				<th>Last Test Attempt</th>
-				<th>Total Test Attempts</th>
-			</tr>
-			<tr ng-repeat="userdetail in userdetails">
-				<td>{{ $index+1 }}</td>
-				<td>{{ userdetail.fullName }}</td>
-				<td>{{ userdetail.email }}</td>
-				<td>{{ userdetail.testresult }}</td>
-				<td>{{ userdetail.lastattemptoftest }}</td>
-				<td>{{ userdetail.totalattempts }}</td>
-			</tr>
-			<tr>
-				<td colspan="6" style="text-align: right;"><input id="login_logoutclick"
-					type="button" value="Log Out" class="blue-button" /></td>
-			</tr>
-
-		</table>
+		<form name="myformimport" ng-submit="importExcel()">
+			<table style="margin-left: auto; margin-right: auto;">
+				<tr>
+					<th style="text-align: center;">S. No</th>
+					<th>Full Name</th>
+					<th>Email</th>
+					<th>Test Result</th>
+					<th>Last Test Attempt</th>
+					<th>Total Test Attempts</th>
+				</tr>
+				<tr ng-repeat="userdetail in userdetails">
+					<td>{{ $index+1 }}</td>
+					<td>{{ userdetail.fullName }}</td>
+					<td>{{ userdetail.email }}</td>
+					<td>{{ userdetail.testresult }}</td>
+					<td>{{ userdetail.lastattemptoftest }}</td>
+					<td>{{ userdetail.totalattempts }}</td>
+				</tr>
+				<tr>
+					<td colspan="6" style="text-align: right;">
+						<input type="button" class="blue-button" value="Import Excel" file-browser>
+							</input>
+						<input id="login_logoutclick" type="button" value="Log Out"
+						class="blue-button" />
+					</td>
+				</tr>
+			</table>
+		</form>
 	</div>
 </body>
 </head>

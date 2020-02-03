@@ -8,15 +8,13 @@ import javax.persistence.Table;
 @Table(name="aptitudeanswers")
 public class AptitudeAnswers 
 {
-	
+
 	@Id
 	private int answid;
 	private int quesid;
 	private String answer;
 	private int sortorder;
-	
-	private transient int userid;
-	
+
 	public int getAnswid() {
 		return answid;
 	}
@@ -35,22 +33,14 @@ public class AptitudeAnswers
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
-	
+
 	public int getSortorder() {
 		return sortorder;
 	}
 	public void setSortorder(int sortorder) {
 		this.sortorder = sortorder;
 	}
-	
-	
-	
-	public int getUserid() {
-		return userid;
-	}
-	public void setUserid(int userid) {
-		this.userid = userid;
-	}
+
 	public String toString()
 	{
 		return new StringBuilder()
