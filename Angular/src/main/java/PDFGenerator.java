@@ -11,7 +11,10 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -42,8 +45,13 @@ public class PDFGenerator {
 		table.setWidthPercentage(100);
 		addTableHeader(table);
 		addRows(table);
-		addCustomRows(table);
+		//addCustomRows(table);
 
+		Font f=new Font(FontFamily.TIMES_ROMAN,25.0f,Font.BOLD,BaseColor.BLUE);
+		Paragraph p=new Paragraph("Aptitude survey Report",f);
+		p.setAlignment(Paragraph.ALIGN_CENTER);
+		document.add(p);
+		document.add(new Paragraph(" "));
 		document.add(table);
 		document.close();	
 	}

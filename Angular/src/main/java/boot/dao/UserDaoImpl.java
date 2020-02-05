@@ -24,8 +24,11 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -67,22 +70,27 @@ public class UserDaoImpl implements UserDao
 	public Map<String, Object> loginUser(UserDetails userDetails) 
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
+		boolean loginexists;
+		boolean passwordcorrect;
 		Session session = this.sessionFactory.getCurrentSession();
 		Criteria cr = session.createCriteria(UserDetails.class);
 		cr.add(Restrictions.eq("loginName", userDetails.getLoginName()));
-		if(cr.list().isEmpty())
+
+		loginexists = !cr.list().isEmpty();
+
+		cr = session.createCriteria(UserDetails.class);
+		cr.add(Restrictions.eq("loginName", userDetails.getLoginName()));
+		cr.add(Restrictions.eq("password", userDetails.getPassword()));
+
+		passwordcorrect = !cr.list().isEmpty();
+
+		if(!loginexists)
 		{
-			cr = session.createCriteria(UserDetails.class);
-			cr.add(Restrictions.eq("loginName", userDetails.getLoginName()));
-			cr.add(Restrictions.eq("password", userDetails.getPassword()));
-			if(cr.list().isEmpty())
-			{
-				map.put("status", "Entered password is Incorrect");
-			}
-			else 
-			{
-				map.put("status", "Login ID does not exist");
-			}
+			map.put("status", "Login ID either does not exist or incorrect");
+		}
+		else if (!passwordcorrect)
+		{
+			map.put("status", "Entered password is incorrect");
 		}
 		else if (userDetails.getLoginName().equalsIgnoreCase("admin"))
 		{
@@ -109,12 +117,15 @@ public class UserDaoImpl implements UserDao
 			PdfWriter.getInstance(document, new FileOutputStream("AptitudeReport.pdf"));
 
 			document.open();
-			document.addTitle("Aptitude survey Report");
+			Font f=new Font(FontFamily.TIMES_ROMAN,25.0f,Font.BOLD,BaseColor.BLUE);
+			Paragraph p=new Paragraph("Aptitude survey Report",f);
+			p.setAlignment(Paragraph.ALIGN_CENTER);
+			document.add(p);
 			PdfPTable table = new PdfPTable(6);
 			table.setWidthPercentage(100);
 			addTableHeader(table);
 			addRows(table);
-			addCustomRows(table);
+			//addCustomRows(table);
 
 			document.add(table);
 			document.close();
