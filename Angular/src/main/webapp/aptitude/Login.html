@@ -1,231 +1,18 @@
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
+<link rel="stylesheet" href="css/style.css">
+<script src="js/angular.js"></script>
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/Login.js"></script>
 <title>Login Page</title>
-<script type="text/javascript">
-	var app = angular.module("Aptitude", []);
-	var method = "";
-	var url = "";
-	var data = "";
-	var aptitudearray = [];
-	var questionarray = [];
-	var answerarray = [];
-	var userid = -1;
-	app
-			.controller(
-					"AptitudeController",
-					function($scope, $http) {
-						$scope.login = {
-							loginName : "",
-							password : ""
-						};
-
-						$scope.aptitude = [];
-
-						$scope.loginUser = function() {
-							method = "POST";
-							url = "/loginUser";
-							data = $scope.login;
-
-							if ($scope.login != undefined) {
-								backendcall(method, url, data);
-							}
-						}
-
-						function backendcall(method, url, data) {
-							$http({
-								method : method,
-								url : url,
-								data : angular.toJson(data),
-								headers : {
-									'Content-Type' : 'application/json'
-								}
-							}).then(success, error);
-						}
-
-						function success(response) {
-							if (response.data["status"] != undefined) {
-								if (response.data["status"] == "Login Successfull!!!"
-										&& response.data["userdetails"] != undefined) {
-									cleardata();
-									alert(response.data["status"]);
-									method = "GET";
-									url = "/getAptitude";
-									data = null;
-									userid = response.data["userdetails"]["id"];
-									backendcall(method, url, data);
-
-								} else {
-									alert(response.data["status"]);
-								}
-							} else if (typeof response.data == "object") {
-								if (response.data["questions"] != undefined
-										&& response.data["answers"] != undefined) {
-									document.getElementById("div_login").style.display = "none";
-									document.getElementById("div_aptitude").style.display = "block";
-									$scope.aptitude["question"] = response.data["questions"];
-									questionarray = response.data["questions"];
-									answerarray = response.data["answers"];
-									var array = [];
-									for (i = 0; i < questionarray.length; i++) {
-
-										aptitudearray["question"] = questionarray[i];
-										var index = 0;
-										var multiarray = [];
-										for (j = 0; j < answerarray.length; j++) {
-											if (questionarray[i]["quesid"] == answerarray[j]["quesid"]) {
-												multiarray = multiarray
-														.concat(answerarray[j]);
-											}
-										}
-										aptitudearray["question"]["answers"] = multiarray;
-										console.log("");
-
-										array = array
-												.concat(aptitudearray["question"]);
-										console.log("");
-									}
-								} else if (response.data["Result"] != undefined) {
-									if (response.data["Result"] == "Success") {
-										alert("Thanks for participating "
-												+ response.data["userdetails"]["fullName"]
-												+ ". Have a nice day!!!. \n By clicking the OK button will Logout.");
-										location.reload();
-									} else if (response.data["Result"] == "Failure") {
-										alert("Try submiting again!!!");
-									}
-								} else if (response.data["userdetails"] != undefined) {
-									document.getElementById("div_login").style.display = "none";
-									document.getElementById("div_aptitude").style.display = "none";
-									document.getElementById("div_result").style.display = "block";
-									$scope.userdetails = response.data["userdetails"];
-								}
-							}
-						}
-
-						function error(response) {
-							console.log(response.statusText);
-						}
-
-						function cleardata() {
-							$scope.login.loginName = "";
-							$scope.login.password = "";
-						}
-
-						$scope.validateanswers = function() {
-							var radiobindingarray = [];
-							var validateanswerarray = [];
-							radiobindingarray = $scope.myform.$$success["parse"];
-							for (i = 0; i < radiobindingarray.length; i++) {
-								console.log(radiobindingarray[i].$viewValue);
-								validateanswerarray = validateanswerarray
-										.concat(radiobindingarray[i].$viewValue);
-							}
-
-							method = "POST";
-							url = "/validateAnswer";
-							data = {};
-							data.validateanswerarray = validateanswerarray;
-							data.userid = userid;
-
-							if (radiobindingarray != undefined) {
-								backendcall(method, url, data);
-							}
-
-						}
-					})
-
-	app.factory('readFile', function($window, $q) {
-		'use strict';
-
-		var readFile = function(file) {
-			var deferred = $q.defer(), reader = new $window.FileReader();
-
-			reader.onload = function(ev) {
-				var content = ev.target.result;
-				deferred.resolve(content);
-			};
-
-			reader.readAsText(file);
-			return deferred.promise;
-		};
-
-		return readFile;
-	})
-
-	app.directive('fileBrowser', function(readFile, $http) {
-		'use strict';
-
-		var filename;
-
-		return {
-			template : '<input type="file" style="display: none;" />'
-					+ '<ng-transclude></ng-transclude>',
-			transclude : true,
-			link : function(scope, element) {
-				var fileInput = element.children('input[file]');
-
-				fileInput.on('change', function(event) {
-					var file = event.target.files[0];
-					filename = file;
-					console.log(filename.name);
-					var fd = new FormData();
-					fd.append('file', file);
-
-					$http.post("/uploadAptitude", fd, {
-						transformRequest : angular.identity,
-						headers : {
-							'Content-Type' : undefined
-						},
-						data : fd
-					}).then(success, error);
-
-				});
-
-				element.on('click', function() {
-					fileInput[0].click();
-				});
-
-				function success(response) {
-					alert(response.data);
-				}
-				function error(response) {
-					console.log(response.statusText);
-					alert(response.data);
-				}
-			}
-		};
-	});
-
-	$(document).ready(function() {
-		$("#login_registerclick").click(login_callRegister);
-		$("#login_clearclick").click(login_callClear);
-		$("#login_logoutclick").click(login_callLogout);
-
-		function login_callRegister() {
-			window.location.href = "Register.html";
-		}
-
-		function login_callClear() {
-			login_LoginName.value = "";
-			login_Password.value = "";
-		}
-
-		function login_callLogout() {
-			location.reload();
-		}
-	});
-</script>
-
 <!-- <table style="margin-left:auto;margin-right:auto;"> style="margin: 0px auto;" -->
 <body ng-app="Aptitude" ng-controller="AptitudeController">
 	<div style="margin-top: 200px; display: block;" id="div_login">
 		<form ng-submit="loginUser()">
+			<!-- <label>Date format: <input ng-model="format"></label>
+			<hr />
+			Current time is: <span my-current-time="format"></span>
+			<hr /> -->
 			<table style="margin-left: auto; margin-right: auto;">
 				<tr>
 					<th colspan="2" style="text-align: center;">Login Information</th>
@@ -254,6 +41,7 @@
 	</div>
 	<div style="display: none;" id="div_aptitude">
 		<form name="myform" ng-submit="validateanswers()">
+			<p align="right" ng-bind="counter"></p>
 			<ul style="list-style-type: none; padding: 0;">
 				<li ng-repeat="questions in aptitude.question">
 					<p>{{($index+1+". ")+questions.question}}</p>
@@ -273,7 +61,7 @@
 		{{answers}}
 	</div>
 	<div style="display: none;" id="div_result">
-		<form name="myformimport" ng-submit="importExcel()">
+		<form name="myformimport" ng-submit="exportPDF()">
 			<table style="margin-left: auto; margin-right: auto;">
 				<tr>
 					<th style="text-align: center;">S. No</th>
@@ -292,12 +80,12 @@
 					<td>{{ userdetail.totalattempts }}</td>
 				</tr>
 				<tr>
-					<td colspan="6" style="text-align: right;">
-						<input type="button" class="blue-button" value="Import Excel" file-browser>
-							</input>
-						<input id="login_logoutclick" type="button" value="Log Out"
-						class="blue-button" />
-					</td>
+					<td colspan="6" style="text-align: right;"><input
+						type="button" class="blue-button" value="Import Excel"
+						file-browser /> <input type="submit" id="getpdf"
+						value="Export PDF" class="blue-button" /> <input
+						id="login_logoutclick" type="button" value="Log Out"
+						class="blue-button" /></td>
 				</tr>
 			</table>
 		</form>
