@@ -1,7 +1,9 @@
 package boot.controller;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.itextpdf.text.DocumentException;
 
 import boot.model.UserDetails;
 import boot.service.AptitudeService;
@@ -54,6 +58,11 @@ public class AptitudeController
 	@RequestMapping(value = "/uploadAptitude", method = RequestMethod.POST, headers = "Content-Type= multipart/form-data")
 	public Object uploadAptitude(@RequestParam("file") MultipartFile file) throws IOException {
 		return excelService.uploadAptitude(file);
+	}
+	
+	@RequestMapping(value = "/generatePdf", method = RequestMethod.GET, headers = "Accept=application/json")
+	public Map<String, Object> generatePdf() throws IOException, DocumentException, URISyntaxException {
+		return userService.generatePdf();
 	}
 
 }

@@ -144,13 +144,19 @@ public class AptitiudeDaoImpl implements AptitudeDao
 			}
 		}
 
-		totalquestions = Listsanswers.size();
+		str = "select * from AptitudeQuestions";
+
+		query = session.createSQLQuery(str);
+
+		List<Object> result = (List<Object>) query.list(); 
+		
+		totalquestions = result.size();
 
 		str = "select * from UserDetails where id="+userid;
 
 		query = session.createSQLQuery(str);
 
-		List<Object> result = (List<Object>) query.list(); 
+		result = (List<Object>) query.list(); 
 		Iterator<Object> itr = result.iterator();
 
 		while(itr.hasNext())
