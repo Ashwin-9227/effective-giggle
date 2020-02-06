@@ -8,7 +8,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 http://www.springframework.org/schema/context  
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="com.Ekarting"></context:component-scan>
+	<context:component-scan base-package="com.Ekarting.controllers"></context:component-scan>
 	
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
@@ -47,7 +47,7 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 			</props>
 		</property>
 	</bean>  -->
-
+	
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="${prefix}"></property>
@@ -58,13 +58,13 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<property name="dataSource" ref="ds"></property>
 	</bean>
 	
-	<!--  <bean id="ht"
+	<!-- <bean id="ht"
 		class="org.springframework.orm.hibernate3.HibernateTemplate">
 		<property name="sessionFactory" ref="mysessionFactory"></property>
-	</bean>  -->
+	</bean> -->
 
 	  <bean id="dao" class="com.Ekarting.dao.UsersDao">
 		<property name="jdbctemplate" ref="jt"></property>
-		<!-- <property name="hibernateTemplate" ref="ht"></property> --> 
+		<!-- <property name="hibernateTemplate" ref="ht"></property>  -->
 	</bean>
 </beans>
