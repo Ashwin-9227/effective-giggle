@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0"
+	xmlns:t="http://tuscany.apache.org/xmlns/sca/1.0"
+	xmlns:s="http://techsurvey" 
+	targetNamespace="http://techsurvey" 
+	name="techsurvey">
+	
+	<component name="techsurvey">
+			<t:implementation.widget location="userinterface/techsurvey.html" />
+		<service name="Widget">
+			<t:binding.http uri="http://localhost:8080/techsurvey" />
+		</service>
+		<reference name="techsurveydata" target="TechSurveyData" >
+		<t:binding.jsonrpc />
+		</reference>
+	</component>
+	
+	<component name="TechSurveyData">
+		<implementation.java class="services.TechSurveyDataImpl" />
+		<property name="test">binding</property>
+		<service name="TechSurveyData">
+			<t:binding.jsonrpc uri="http://localhost:8080/TechSurveyData"/>
+		</service>
+	</component>
+	
+	
+</composite>
